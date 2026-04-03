@@ -1,17 +1,17 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: uptime-dev
+  name: uptime-staging
   namespace: argocd
 spec:
-  project: default
+  project: uptime-platform
   source:
     repoURL: https://github.com/itsredbull/devops-app-platform.git
     targetRevision: main
-    path: deploy/k8s/overlays/dev
+    path: deploy/k8s/overlays/staging
   destination:
     server: https://kubernetes.default.svc
-    namespace: uptime-dev
+    namespace: uptime-staging
   syncPolicy:
     automated:
       prune: true

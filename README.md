@@ -14,7 +14,7 @@ This project demonstrates end-to-end DevOps work:
 
 ## Current Phase
 
-`Phase 5: Kubernetes Deploy (completed)`
+`Phase 6: GitOps (completed)`
 
 - PostgreSQL-backed target/check storage
 - target CRUD APIs implemented
@@ -29,6 +29,8 @@ This project demonstrates end-to-end DevOps work:
 - Kubernetes base manifests for app + postgres
 - dev and staging overlays via Kustomize
 - config/secret management through generators
+- Argo CD app-of-apps bootstrap added
+- auto-sync for dev/staging from Git
 
 ## CI Quality Gates
 
@@ -59,6 +61,26 @@ This phase uses **Kustomize** overlays (not Helm):
 Deployment guide:
 
 - `deploy/k8s/README.md`
+
+## GitOps (Argo CD)
+
+Argo CD manifests are in:
+
+- `deploy/argocd/bootstrap/root-app.yaml`
+- `deploy/argocd/apps/project.yaml`
+- `deploy/argocd/apps/app-dev.yaml`
+- `deploy/argocd/apps/app-staging.yaml`
+
+Install and bootstrap:
+
+```bash
+make argocd-install
+make argocd-bootstrap
+```
+
+Detailed guide:
+
+- `deploy/argocd/README.md`
 
 ## Project Structure
 

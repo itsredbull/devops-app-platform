@@ -3,7 +3,7 @@ SHELL := /bin/bash
 PORT ?= 8080
 TEST_DATABASE_DSN ?= postgres://uptime:uptime@localhost:5432/uptime?sslmode=disable
 
-.PHONY: run test test-integration lint fmt build db-up db-down stack-up stack-down
+.PHONY: run test test-integration lint fmt build db-up db-down stack-up stack-down argocd-install argocd-bootstrap
 
 run:
 	cd app && APP_PORT=$(PORT) go run ./cmd/uptime-api
@@ -34,3 +34,10 @@ stack-up:
 
 stack-down:
 	docker compose down
+
+argocd-install:
+	kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+argocd-bootstrap:
+	kubectl apply -f deploy/argocd/bootstrap/root-app.yaml
