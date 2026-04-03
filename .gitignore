@@ -23,6 +23,8 @@ bin/
 *.test
 coverage.out
 app/.cache/
+app/uptime-api
+app/uptime-api.exe
 
 # Terraform
 .terraform/
