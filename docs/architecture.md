@@ -14,6 +14,23 @@ URL Uptime Monitor platform with GitOps deployment and production-style operatio
 - `Terraform`: infrastructure provisioning
 - `GitHub Actions`: CI/image release automation
 
+## Architecture Diagram
+
+```mermaid
+flowchart LR
+  U[User / Client] --> API[uptime-api]
+  API --> DB[(PostgreSQL)]
+  API --> M[/metrics/]
+  M --> P[Prometheus]
+  P --> G[Grafana]
+  P --> A[Alert Rules]
+  GH[GitHub Actions] --> IMG[Container Image]
+  IMG --> ARGO[Argo CD]
+  ARGO --> K8S[Kubernetes dev/staging]
+  TF[Terraform] --> AWS[AWS Infra]
+  K8S --> API
+```
+
 ## Runtime Data Flow
 
 1. User creates a target URL via API.

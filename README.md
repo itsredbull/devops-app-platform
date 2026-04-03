@@ -14,7 +14,7 @@ This project demonstrates end-to-end DevOps work:
 
 ## Current Phase
 
-`Phase 9: Ops Credibility (completed)`
+`Phase 10: Portfolio Polish (completed)`
 
 - PostgreSQL-backed target/check storage
 - target CRUD APIs implemented
@@ -40,6 +40,9 @@ This project demonstrates end-to-end DevOps work:
 - Failure drill script added for local and Kubernetes scenarios
 - Rollback test procedure documented and drill-backed
 - Incident postmortem and demo screenshot checklist added
+- One-command quickstart added (`make quickstart`)
+- Architecture diagram added in docs
+- README now includes build/learning/trade-off summary
 
 ## CI Quality Gates
 
@@ -146,6 +149,24 @@ Access:
 - `docs/`: architecture, API, runbook, postmortems
 - `.github/workflows/`: CI/CD workflows
 
+## One-Command Quickstart
+
+```bash
+make quickstart
+```
+
+This starts app, database, Prometheus, and Grafana together.
+
+Stop everything:
+
+```bash
+make quickstart-down
+```
+
+## Architecture Diagram
+
+- See: `docs/architecture.md`
+
 ## Local Run (host app + docker db)
 
 1. Start PostgreSQL:
@@ -223,3 +244,27 @@ kill -9 <PID>
 - Runbook: `docs/runbook.md`
 - Postmortem: `docs/postmortems/incident-001.md`
 - Demo screenshots checklist: `docs/screenshots/README.md`
+
+## What I Built
+
+- A Go-based uptime monitoring API with scheduler and checker workers
+- PostgreSQL-backed target and check history persistence
+- CI quality gates with lint/test/build and container vulnerability scanning
+- Kubernetes deployment with dev/staging overlays and GitOps sync via Argo CD
+- Terraform stacks for infra modules and remote state
+- Observability with Prometheus metrics, alert rules, and Grafana dashboard
+- Ops workflows with failure drills, rollback tests, runbook, and postmortem
+
+## What I Learned
+
+- How to connect app reliability signals to actionable alerting
+- How to structure GitOps so rollback is fast and low-risk
+- How to design Terraform modules usable across environments
+- How to write operational docs that support incident response
+
+## Trade-Offs
+
+- Postgres is deployed in-cluster for simplicity; managed DB would be better for production
+- Single app service keeps architecture clear; fewer components but less specialization
+- Local quickstart favors speed over strict production parity
+- Alert thresholds are practical defaults and should be tuned with real traffic
