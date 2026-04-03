@@ -1,0 +1,106 @@
+# DevOps App Platform
+
+Production-style DevOps portfolio project built around a URL Uptime Monitor service.
+
+## Purpose
+
+This project demonstrates end-to-end DevOps work:
+
+- infrastructure as code
+- CI/CD with quality and security gates
+- Kubernetes deployment with GitOps
+- observability and alerting
+- incident handling and rollback
+
+## Current Phase
+
+`Phase 3: Local Runtime + testing hardening (completed)`
+
+- PostgreSQL-backed target/check storage
+- target CRUD APIs implemented
+- status and checks APIs implemented
+- scheduler + checker worker implemented
+- Prometheus metrics endpoint implemented
+- integration API flow test added
+- checker retry/backoff and error classification added
+- containerized local stack for app + db added
+
+## Project Structure
+
+- `app/`: Go service source, migrations, Dockerfile
+- `infra/`: Terraform and Ansible layout
+- `deploy/`: Kubernetes, Helm, Argo CD manifests
+- `monitoring/`: Prometheus rules and Grafana dashboards
+- `docs/`: architecture, API, runbook, postmortems
+- `.github/workflows/`: CI/CD workflow placeholders
+
+## Local Run (host app + docker db)
+
+1. Start PostgreSQL:
+
+```bash
+make db-up
+```
+
+2. Run API service:
+
+```bash
+make run PORT=8081
+```
+
+3. Verify endpoints:
+
+```bash
+curl -sS http://localhost:8081/healthz
+curl -sS http://localhost:8081/readyz
+curl -sS http://localhost:8081/metrics
+```
+
+4. Create target and view status:
+
+```bash
+curl -sS -X POST http://localhost:8081/api/v1/targets \
+  -H 'Content-Type: application/json' \
+  -d '{"url":"https://example.com","check_interval_seconds":30,"timeout_seconds":10,"enabled":true}'
+
+curl -sS http://localhost:8081/api/v1/status
+```
+
+## Local Run (fully containerized)
+
+```bash
+make stack-up
+curl -sS http://localhost:8080/healthz
+make stack-down
+```
+
+## Tests
+
+```bash
+make test
+make test-integration
+```
+
+## Checker Runtime Settings
+
+- `CHECK_MAX_ATTEMPTS` (default `3`)
+- `CHECK_RETRY_BACKOFF_MS` (default `200`)
+
+Retries are used for transient failures (network errors, timeouts, and HTTP 5xx).
+
+## Troubleshooting
+
+### `listen tcp :8080: bind: address already in use`
+
+Run on a different port:
+
+```bash
+make run PORT=8081
+```
+
+Or find and stop process on `8080`:
+
+```bash
+lsof -nP -iTCP:8080 -sTCP:LISTEN
+kill -9 <PID>
+```

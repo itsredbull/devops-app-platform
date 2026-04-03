@@ -1,0 +1,35 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and temp
+*.log
+*.tmp
+*.bak
+*.out
+
+# Env
+.env
+.env.*
+
+# Go
+bin/
+*.test
+coverage.out
+app/.cache/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# Python cache if scripts grow
+__pycache__/
+*.pyc

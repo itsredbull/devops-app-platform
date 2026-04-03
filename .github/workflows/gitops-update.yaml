@@ -1,0 +1,10 @@
+name: gitops-update
+on:
+  workflow_dispatch:
+
+jobs:
+  phase1-placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: echo "Phase 1 gitops-update scaffold"

@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: uptime-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: uptime
+      POSTGRES_USER: uptime
+      POSTGRES_PASSWORD: uptime
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: uptime-api
+    restart: unless-stopped
+    environment:
+      APP_PORT: 8080
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: uptime
+      DB_USER: uptime
+      DB_PASSWORD: uptime
+      DB_SSLMODE: disable
+      AUTO_MIGRATE: "true"
+      MIGRATIONS_DIR: /migrations
+      SCHEDULER_TICK_SECONDS: 5
+      CHECK_MAX_ATTEMPTS: 3
+      CHECK_RETRY_BACKOFF_MS: 200
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
