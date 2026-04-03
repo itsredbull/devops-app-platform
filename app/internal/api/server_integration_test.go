@@ -28,6 +28,10 @@ func TestIntegrationAPIFlow(t *testing.T) {
 	}
 	defer st.Close()
 
+	if err = st.Ping(ctx); err != nil {
+		t.Skipf("postgres not reachable for integration test: %v", err)
+	}
+
 	if err = st.ApplyMigrations(ctx, "../../migrations"); err != nil {
 		t.Fatalf("apply migrations: %v", err)
 	}
