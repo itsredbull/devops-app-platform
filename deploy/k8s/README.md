@@ -48,3 +48,18 @@ kubectl kustomize deploy/k8s/overlays/staging
 ## Update App Image Tag (staging)
 
 Edit `deploy/k8s/overlays/staging/kustomization.yaml` under `images.newTag`.
+
+## Rollback Test (staging)
+
+Simulate a bad image rollout and then recover:
+
+```bash
+./scripts/failure-drill.sh k8s
+```
+
+Manual rollback command:
+
+```bash
+kubectl -n uptime-staging rollout undo deployment/uptime-api
+kubectl -n uptime-staging rollout status deployment/uptime-api --timeout=120s
+```

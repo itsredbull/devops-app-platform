@@ -14,7 +14,7 @@ This project demonstrates end-to-end DevOps work:
 
 ## Current Phase
 
-`Phase 8: Observability (completed)`
+`Phase 9: Ops Credibility (completed)`
 
 - PostgreSQL-backed target/check storage
 - target CRUD APIs implemented
@@ -37,6 +37,9 @@ This project demonstrates end-to-end DevOps work:
 - Prometheus scrape configuration added
 - Grafana dashboard for uptime checks and latency
 - Alert rules for failure ratio, high latency, and no-checks condition
+- Failure drill script added for local and Kubernetes scenarios
+- Rollback test procedure documented and drill-backed
+- Incident postmortem and demo screenshot checklist added
 
 ## CI Quality Gates
 
@@ -213,3 +216,10 @@ Or find and stop process on `8080`:
 lsof -nP -iTCP:8080 -sTCP:LISTEN
 kill -9 <PID>
 ```
+
+## Ops Credibility Artifacts
+
+- Failure drill script: `scripts/failure-drill.sh`
+- Runbook: `docs/runbook.md`
+- Postmortem: `docs/postmortems/incident-001.md`
+- Demo screenshots checklist: `docs/screenshots/README.md`
