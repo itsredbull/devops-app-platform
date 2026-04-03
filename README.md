@@ -14,7 +14,7 @@ This project demonstrates end-to-end DevOps work:
 
 ## Current Phase
 
-`Phase 4: CI Quality Gates (completed)`
+`Phase 5: Kubernetes Deploy (completed)`
 
 - PostgreSQL-backed target/check storage
 - target CRUD APIs implemented
@@ -26,6 +26,9 @@ This project demonstrates end-to-end DevOps work:
 - containerized local stack for app + db added
 - GitHub Actions quality gates implemented
 - Trivy image scan added with critical-fail policy
+- Kubernetes base manifests for app + postgres
+- dev and staging overlays via Kustomize
+- config/secret management through generators
 
 ## CI Quality Gates
 
@@ -44,6 +47,18 @@ Security gate policy:
 
 - pipeline fails if Trivy finds `CRITICAL` vulnerabilities
 - SARIF report is uploaded to GitHub Security tab
+
+## Kubernetes Deploy
+
+This phase uses **Kustomize** overlays (not Helm):
+
+- base: `deploy/k8s/base`
+- dev overlay: `deploy/k8s/overlays/dev`
+- staging overlay: `deploy/k8s/overlays/staging`
+
+Deployment guide:
+
+- `deploy/k8s/README.md`
 
 ## Project Structure
 

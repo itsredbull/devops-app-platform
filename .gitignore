@@ -17,6 +17,8 @@ Thumbs.db
 # Env
 .env
 .env.*
+deploy/k8s/overlays/dev/secret.env
+deploy/k8s/overlays/staging/secret.env
 
 # Go
 bin/
