@@ -14,7 +14,7 @@ This project demonstrates end-to-end DevOps work:
 
 ## Current Phase
 
-`Phase 7: Terraform Infra (completed)`
+`Phase 8: Observability (completed)`
 
 - PostgreSQL-backed target/check storage
 - target CRUD APIs implemented
@@ -34,6 +34,9 @@ This project demonstrates end-to-end DevOps work:
 - Terraform modules for network, Kubernetes, database, monitoring
 - Remote state bootstrap (S3 + DynamoDB)
 - Dedicated Terraform env stacks for dev and staging
+- Prometheus scrape configuration added
+- Grafana dashboard for uptime checks and latency
+- Alert rules for failure ratio, high latency, and no-checks condition
 
 ## CI Quality Gates
 
@@ -110,6 +113,26 @@ cp terraform.tfvars.example terraform.tfvars
 terraform init -backend-config=backend.hcl
 terraform plan
 ```
+
+## Observability
+
+Monitoring assets:
+
+- `monitoring/prometheus/prometheus.yml`
+- `monitoring/prometheus/alerts/uptime-rules.yaml`
+- `monitoring/grafana/dashboards/uptime-overview.json`
+
+Start local monitoring stack:
+
+```bash
+make stack-up
+make monitoring-up
+```
+
+Access:
+
+- Prometheus: `http://localhost:9090`
+- Grafana: `http://localhost:3000` (admin/admin)
 
 ## Project Structure
 

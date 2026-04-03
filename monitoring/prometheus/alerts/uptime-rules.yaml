@@ -1,1 +1,44 @@
-# Phase 1 placeholder
+groups:
+  - name: uptime-api-alerts
+    rules:
+      - alert: UptimeHighFailureRatio
+        expr: |
+          (
+            sum(increase(uptime_checks_total{result="failure"}[10m]))
+            /
+            clamp_min(sum(increase(uptime_checks_total[10m])), 1)
+          ) > 0.20
+        for: 10m
+        labels:
+          severity: warning
+          service: uptime-api
+        annotations:
+          summary: "High uptime check failure ratio"
+          description: "Failure ratio is above 20% over the last 10 minutes."
+
+      - alert: UptimeHighLatencyP95
+        expr: |
+          histogram_quantile(
+            0.95,
+            sum by (le) (rate(uptime_check_latency_ms_bucket[10m]))
+          ) > 1000
+        for: 10m
+        labels:
+          severity: warning
+          service: uptime-api
+        annotations:
+          summary: "High uptime check latency"
+          description: "P95 check latency is above 1000 ms for 10 minutes."
+
+      - alert: UptimeNoChecks
+        expr: |
+          sum(increase(uptime_checks_total[10m])) == 0
+          and
+          max(uptime_enabled_targets) > 0
+        for: 10m
+        labels:
+          severity: critical
+          service: uptime-api
+        annotations:
+          summary: "No checks are being executed"
+          description: "No new checks were recorded in the last 10 minutes while enabled targets exist."

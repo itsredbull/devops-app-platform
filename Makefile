@@ -3,7 +3,7 @@ SHELL := /bin/bash
 PORT ?= 8080
 TEST_DATABASE_DSN ?= postgres://uptime:uptime@localhost:5432/uptime?sslmode=disable
 
-.PHONY: run test test-integration lint fmt build db-up db-down stack-up stack-down argocd-install argocd-bootstrap
+.PHONY: run test test-integration lint fmt build db-up db-down stack-up stack-down monitoring-up monitoring-down argocd-install argocd-bootstrap
 
 run:
 	cd app && APP_PORT=$(PORT) go run ./cmd/uptime-api
@@ -34,6 +34,12 @@ stack-up:
 
 stack-down:
 	docker compose down
+
+monitoring-up:
+	docker compose up -d prometheus grafana
+
+monitoring-down:
+	docker compose stop grafana prometheus
 
 argocd-install:
 	kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -

@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: uptime-dashboards
+    orgId: 1
+    folder: "Uptime"
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards
