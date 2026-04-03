@@ -14,7 +14,7 @@ This project demonstrates end-to-end DevOps work:
 
 ## Current Phase
 
-`Phase 3: Local Runtime + testing hardening (completed)`
+`Phase 4: CI Quality Gates (completed)`
 
 - PostgreSQL-backed target/check storage
 - target CRUD APIs implemented
@@ -24,6 +24,26 @@ This project demonstrates end-to-end DevOps work:
 - integration API flow test added
 - checker retry/backoff and error classification added
 - containerized local stack for app + db added
+- GitHub Actions quality gates implemented
+- Trivy image scan added with critical-fail policy
+
+## CI Quality Gates
+
+Workflow: `.github/workflows/ci.yaml`
+
+On every push/PR to `main`, CI runs:
+
+- format check (`gofmt -l`)
+- lint (`go vet ./...`)
+- tests (`go test ./...`)
+- build (`go build ./cmd/uptime-api`)
+- Docker image build (`docker build`)
+- Trivy image scan
+
+Security gate policy:
+
+- pipeline fails if Trivy finds `CRITICAL` vulnerabilities
+- SARIF report is uploaded to GitHub Security tab
 
 ## Project Structure
 
@@ -32,7 +52,7 @@ This project demonstrates end-to-end DevOps work:
 - `deploy/`: Kubernetes, Helm, Argo CD manifests
 - `monitoring/`: Prometheus rules and Grafana dashboards
 - `docs/`: architecture, API, runbook, postmortems
-- `.github/workflows/`: CI/CD workflow placeholders
+- `.github/workflows/`: CI/CD workflows
 
 ## Local Run (host app + docker db)
 

@@ -1,12 +1,78 @@
 name: ci
+
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
 
 jobs:
-  phase1-placeholder:
+  test-lint-build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Placeholder
-        run: echo "Phase 1 CI scaffold"
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: app/go.mod
+
+      - name: Go mod download
+        working-directory: app
+        run: go mod download
+
+      - name: Format check
+        working-directory: app
+        run: |
+          files=$(gofmt -l .)
+          if [ -n "$files" ]; then
+            echo "Unformatted files found:"
+            echo "$files"
+            exit 1
+          fi
+
+      - name: Lint (go vet)
+        working-directory: app
+        run: go vet ./...
+
+      - name: Unit + integration tests
+        working-directory: app
+        run: go test ./...
+
+      - name: Build binary
+        working-directory: app
+        run: go build ./cmd/uptime-api
+
+      - name: Build Docker image
+        run: docker build -t uptime-api:ci ./app
+
+      - name: Trivy scan (fail on CRITICAL)
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: uptime-api:ci
+          format: table
+          severity: CRITICAL
+          ignore-unfixed: true
+          exit-code: '1'
+
+      - name: Trivy SARIF output
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          image-ref: uptime-api:ci
+          format: sarif
+          output: trivy-results.sarif
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: '0'
+
+      - name: Upload Trivy scan to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: trivy-results.sarif
