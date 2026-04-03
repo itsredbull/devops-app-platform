@@ -33,6 +33,9 @@ app/uptime-api.exe
 *.tfstate
 *.tfstate.*
 .terraform.lock.hcl
+*.tfvars
+*.tfvars.json
+backend.hcl
 
 # Python cache if scripts grow
 __pycache__/

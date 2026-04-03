@@ -14,7 +14,7 @@ This project demonstrates end-to-end DevOps work:
 
 ## Current Phase
 
-`Phase 6: GitOps (completed)`
+`Phase 7: Terraform Infra (completed)`
 
 - PostgreSQL-backed target/check storage
 - target CRUD APIs implemented
@@ -31,6 +31,9 @@ This project demonstrates end-to-end DevOps work:
 - config/secret management through generators
 - Argo CD app-of-apps bootstrap added
 - auto-sync for dev/staging from Git
+- Terraform modules for network, Kubernetes, database, monitoring
+- Remote state bootstrap (S3 + DynamoDB)
+- Dedicated Terraform env stacks for dev and staging
 
 ## CI Quality Gates
 
@@ -81,6 +84,32 @@ make argocd-bootstrap
 Detailed guide:
 
 - `deploy/argocd/README.md`
+
+## Terraform Infra
+
+Terraform layout:
+
+- `infra/terraform/modules/network`
+- `infra/terraform/modules/kubernetes`
+- `infra/terraform/modules/database`
+- `infra/terraform/modules/monitoring`
+- `infra/terraform/envs/dev`
+- `infra/terraform/envs/staging`
+- `infra/terraform/global`
+
+Quick start:
+
+```bash
+cd infra/terraform/global
+cp terraform.tfvars.example terraform.tfvars
+terraform init && terraform apply
+
+cd ../envs/dev
+cp backend.hcl.example backend.hcl
+cp terraform.tfvars.example terraform.tfvars
+terraform init -backend-config=backend.hcl
+terraform plan
+```
 
 ## Project Structure
 

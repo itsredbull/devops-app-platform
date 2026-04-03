@@ -1,0 +1,8 @@
+aws_region        = "us-east-1"
+state_bucket_name = "itsredbull-devops-app-platform-tf-state"
+lock_table_name   = "devops-app-platform-tf-locks"
+
+tags = {
+  Project   = "devops-app-platform"
+  ManagedBy = "terraform"
+}
